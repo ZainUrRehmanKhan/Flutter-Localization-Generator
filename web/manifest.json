@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A Flutter Web Application that can generate .arb (Localization) files in 109 locales automatically from JSON.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
