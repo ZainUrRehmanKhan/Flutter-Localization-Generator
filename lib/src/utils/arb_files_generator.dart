@@ -32,6 +32,7 @@ Future<void> generate() async{
       )..setAttribute("download", "app_$locale.arb")..click();
     }
   }
+  toLocales.clear();
 }
 
 Future<String> getTranslation(String text, String to) async {
