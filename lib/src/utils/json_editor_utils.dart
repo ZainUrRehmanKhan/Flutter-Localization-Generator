@@ -5,6 +5,7 @@ const Color defaultColorBorder = Color(0xFF3E416E);
 const Color defaultColorFileName = Color(0xFF6CD07A);
 
 const double heightOfContainer = 300.0;
+String email;
 
 String content = '{\n  "hello": "Hello World"\n}';
 

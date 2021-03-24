@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localization_generator/src/widget/json_editor.dart';
 import 'package:flutter_localization_generator/src/ui/downloading_page.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/widget/custom_icon_button.dart';
+import 'package:flutter_localization_generator/src/services/firebase_service.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -73,8 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: TextField(
                       controller: emailEditingController,
                       onChanged: (value) async{
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.setString('email', emailEditingController.text);
+                        email = emailEditingController.text;
                       },
                       cursorColor: defaultColorEditor,
                       decoration: InputDecoration(
@@ -204,7 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
               CustomIconButton(
                 title: 'Proceed',
                 icon: CupertinoIcons.arrowtriangle_right_fill,
-                onTap: (){
+                onTap: () async{
+                  await addUser();
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => DownloadPage(),));
                 },

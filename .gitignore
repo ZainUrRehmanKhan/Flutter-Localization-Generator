@@ -9,7 +9,7 @@
 .history
 .svn/
 
-*.env
+public
 
 # IntelliJ related
 *.iml
