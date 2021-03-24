@@ -188,6 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Scrollbar(
                     isAlwaysShown: true,
+
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         return CustomCheckBoxListTile(index: index);
@@ -195,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       itemCount: localesKeyList.length,
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.vertical,
+                      addAutomaticKeepAlives: true,
                       padding: EdgeInsets.all(10),
                     ),
                   ),
@@ -204,11 +206,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: 'Proceed',
                 icon: CupertinoIcons.arrowtriangle_right_fill,
                 onTap: () async{
-                  await addUser();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => DownloadPage(),));
+                  if(toLocales.isNotEmpty){
+                    await addUser();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DownloadPage(),));
+                  }
                 },
-              )
+              ),
+              Container(
+                height: 30,
+                child: Center(child: Text('Please select atleast one locale to proceed.', style: TextStyle(color: defaultColorEditor),)),
+              ),
             ],
           ),
         ),
@@ -225,11 +233,12 @@ class CustomCheckBoxListTile extends StatefulWidget {
   _CustomCheckBoxListTileState createState() => _CustomCheckBoxListTileState();
 }
 
-class _CustomCheckBoxListTileState extends State<CustomCheckBoxListTile> {
+class _CustomCheckBoxListTileState extends State<CustomCheckBoxListTile> with AutomaticKeepAliveClientMixin{
   bool check = false;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return CheckboxListTile(
       activeColor: defaultColorEditor,
       title: Text(
@@ -245,4 +254,7 @@ class _CustomCheckBoxListTileState extends State<CustomCheckBoxListTile> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

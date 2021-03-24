@@ -39,7 +39,7 @@ class _JsonEditorState extends State<JsonEditor> {
               border: Border(bottom: BorderSide(color: defaultColorBorder)),
             ),
             child: Text(
-                fileName,
+              fileName,
               style: TextStyle(
                 fontFamily: "monospace",
                 letterSpacing: 1.0,
@@ -146,7 +146,10 @@ class _JsonEditorState extends State<JsonEditor> {
             color: Colors.black,
           ),
         ),
-        style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.grey[200]), minimumSize: MaterialStateProperty.resolveWith((states) => Size(90, 35))),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateColor.resolveWith((states) => Colors.grey[200]),
+            minimumSize: MaterialStateProperty.resolveWith((states) => Size(90, 35))
+        ),
       ),
     );
   }
