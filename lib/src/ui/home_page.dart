@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_localization_generator/src/widget/json_editor.dart';
+import 'package:flutter_localization_generator/src/views/raw_view.dart';
 import 'package:flutter_localization_generator/src/ui/downloading_page.dart';
+import 'package:flutter_localization_generator/src/views/form_data_view.dart';
+import 'package:flutter_localization_generator/src/views/upload_file_view.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/widget/custom_icon_button.dart';
 import 'package:flutter_localization_generator/src/services/firebase_service.dart';
@@ -16,28 +18,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   TextEditingController emailEditingController = TextEditingController();
-  InputType selected = InputType.FormData;
-
-  onChange(InputType value) {
-    setState(() {
-      selected = value;
-    });
-  }
-
-  Widget customRadioListTile(InputType value, String title, Function onChange) {
-    return SizedBox(
-      width: 200,
-      child: RadioListTile(
-        value: value,
-        groupValue: selected,
-        title: Text(title),
-        activeColor: defaultColorEditor,
-        onChanged: onChange
-      )
-    );
-  }
+  TabController tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     child: TextField(
                       controller: emailEditingController,
-                      onChanged: (value) async{
+                      onChanged: (value) async {
                         email = emailEditingController.text;
                       },
                       cursorColor: defaultColorEditor,
@@ -90,24 +74,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: 'Generate',
                     icon: CupertinoIcons.gear,
                     onTap: () {
-                      if(
-                        emailEditingController.text != '' &&
-                        RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(emailEditingController.text)
-                      ){
+                      if (emailEditingController.text != '' &&
+                          RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(emailEditingController.text)) {
                         Map<String, dynamic> checkJson = jsonDecode(content);
-                        if(checkJson.length == 0){
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Not data found!')));
-                        }
-                        else showDialog(
-                          context: context,
-                          builder: (context) {
-                            return localeDialog();
-                          },
-                        );
-                      }
-                      else{
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid Email Address!')));
+                        if (checkJson.length == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Not data found!')));
+                        } else
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return localeDialog();
+                            },
+                          );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Invalid Email Address!')));
                       }
                     },
                   )
@@ -119,28 +102,40 @@ class _MyHomePageState extends State<MyHomePage> {
               thickness: 0.1,
               color: defaultColorEditor,
             ),
-
-            ///
-            /// Radio Button Option Row
-            ///
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  customRadioListTile(
-                      InputType.FormData, 'Form Data', onChange),
-                  customRadioListTile(InputType.Raw, 'Raw', onChange),
-                  customRadioListTile(
-                      InputType.UploadFile, 'Upload File', onChange),
+            Container(
+              color: defaultColorEditor,
+              height: 60,
+              width: double.infinity,
+              child: TabBar(
+                tabs: [
+                  Text(
+                    'Form Data',
+                    style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                  ),
+                  Text(
+                    'Raw',
+                    style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                  ),
+                  Text(
+                    'Upload File',
+                    style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                  ),
                 ],
+                indicatorColor: Colors.white,
+                isScrollable: true,
+                controller: tabController,
               ),
             ),
-
-            ///
-            /// Editor Body
-            ///
-            JsonEditor(selectedIndex: selected)
+            Expanded(
+              child: TabBarView(
+                children: [
+                  FormDataInputView(),
+                  RawInputView(),
+                  UploadFileInputView(),
+                ],
+                controller: tabController,
+              ),
+            ),
           ],
         ),
       ),
@@ -165,9 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
               Align(
                 alignment: Alignment.topRight,
                 child: InkWell(
-                    child: Icon(CupertinoIcons.clear_thick_circled, color: defaultColorEditor,),
-                  onTap: (){ Navigator.of(context).pop(); }
-                ),
+                    child: Icon(
+                      CupertinoIcons.clear_thick_circled,
+                      color: defaultColorEditor,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    }),
               ),
               Text(
                 'Select locales:',
@@ -188,7 +187,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Scrollbar(
                     isAlwaysShown: true,
-
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         return CustomCheckBoxListTile(index: index);
@@ -205,17 +203,23 @@ class _MyHomePageState extends State<MyHomePage> {
               CustomIconButton(
                 title: 'Proceed',
                 icon: CupertinoIcons.arrowtriangle_right_fill,
-                onTap: () async{
-                  if(toLocales.isNotEmpty){
+                onTap: () async {
+                  if (toLocales.isNotEmpty) {
                     await addUser();
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DownloadPage(),));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DownloadPage(),
+                    ));
                   }
                 },
               ),
               Container(
                 height: 30,
-                child: Center(child: Text('Please select atleast one locale to proceed.', style: TextStyle(color: defaultColorEditor),)),
+                child: Center(
+                    child: Text(
+                  'Please select atleast one locale to proceed.',
+                  style: TextStyle(color: defaultColorEditor),
+                )),
               ),
             ],
           ),
@@ -223,17 +227,31 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
 }
 
 class CustomCheckBoxListTile extends StatefulWidget {
   final int index;
+
   CustomCheckBoxListTile({@required this.index});
 
   @override
   _CustomCheckBoxListTileState createState() => _CustomCheckBoxListTileState();
 }
 
-class _CustomCheckBoxListTileState extends State<CustomCheckBoxListTile> with AutomaticKeepAliveClientMixin{
+class _CustomCheckBoxListTileState extends State<CustomCheckBoxListTile>
+    with AutomaticKeepAliveClientMixin {
   bool check = false;
 
   @override
@@ -242,12 +260,19 @@ class _CustomCheckBoxListTileState extends State<CustomCheckBoxListTile> with Au
     return CheckboxListTile(
       activeColor: defaultColorEditor,
       title: Text(
-        localesKeyList[widget.index] + ' ( ' + localesValueList[widget.index] + ' )',
-        style: TextStyle(fontSize: 15, fontFamily: 'monospace', fontWeight: FontWeight.w500),
+        localesKeyList[widget.index] +
+            ' ( ' +
+            localesValueList[widget.index] +
+            ' )',
+        style: TextStyle(
+            fontSize: 15, fontFamily: 'monospace', fontWeight: FontWeight.w500),
       ),
       value: check,
-      onChanged: (value) async{
-        value ? toLocales.add(localesValueList[widget.index]) : toLocales.removeWhere((element) => element == localesValueList[widget.index]);
+      onChanged: (value) async {
+        value
+            ? toLocales.add(localesValueList[widget.index])
+            : toLocales.removeWhere(
+                (element) => element == localesValueList[widget.index]);
         setState(() {
           check = value;
         });
