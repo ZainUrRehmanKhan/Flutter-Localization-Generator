@@ -42,7 +42,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(widget.title,
-                style: TextStyle(color: Colors.grey[200], fontSize: 15)),
+                style: TextStyle(color: Colors.grey[200], fontSize: 15, fontFamily: 'monospace')),
             VerticalDivider(
               color: Colors.grey[200],
               width: 0.2,

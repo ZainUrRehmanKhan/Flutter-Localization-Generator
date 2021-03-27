@@ -37,8 +37,10 @@ class _RawInputViewState extends State<RawInputView> {
                         top: 10,
                         bottom: 50,
                       ),
+                      height: 400,
                       child: TextField(
                         maxLines: 1000,
+                        decoration: InputDecoration(border: InputBorder.none),
                         controller: jsonEditingController,
                         cursorColor: Colors.green,
                         autofocus: true,
@@ -46,15 +48,18 @@ class _RawInputViewState extends State<RawInputView> {
                             fontSize: 13, fontWeight: FontWeight.w200),
                       ),
                     )
-                  : Text(
-                      '\n' + content,
-                      style: TextStyle(
-                          fontFamily: "monospace",
-                          letterSpacing: 1.0,
-                          fontWeight: FontWeight.w100,
-                          fontSize: 13,
-                          color: Colors.grey[200]),
-                    )),
+                  : Container(
+                    height: 350,
+                    child: Text(
+                        '\n' + content,
+                        style: TextStyle(
+                            fontFamily: "monospace",
+                            letterSpacing: 1.0,
+                            fontWeight: FontWeight.w100,
+                            fontSize: 13,
+                            color: Colors.grey[200]),
+                      ),
+                  )),
           editRawButton(),
         ],
       ),

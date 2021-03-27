@@ -40,3 +40,13 @@ Future<void> generate() async {
 Future<String> getTranslation(String text, String to) async {
   return (await text.translate(to: to, from: fromLocale)).text;
 }
+
+void exportJson(){
+  var blob = html.Blob([content], 'text/plain', 'native');
+
+  html.AnchorElement(
+    href: html.Url.createObjectUrlFromBlob(blob).toString(),
+  )
+    ..setAttribute("download", "localization_export.json")
+    ..click();
+}

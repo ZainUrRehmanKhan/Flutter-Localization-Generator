@@ -13,7 +13,6 @@ class EditorBackground extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15),
       width: double.infinity,
-      height: 400,
       decoration: BoxDecoration(
         color: edit ? Colors.white : defaultColorEditor,
         border: Border(bottom: BorderSide(color: defaultColorBorder)),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import '../widget/editor_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/ui/widget/editor_background.dart';
-
-import '../widget/editor_wrapper.dart';
+import 'package:flutter_localization_generator/src/ui/widget/custom_icon_button.dart';
 
 class FormDataInputView extends StatefulWidget {
   @override
@@ -12,7 +12,9 @@ class FormDataInputView extends StatefulWidget {
 
 class _FormDataInputViewState extends State<FormDataInputView> {
   String jsonParsingError = '';
+  final _formKey = GlobalKey<FormState>();
   List<TableRow> rowList = [];
+  BuildContext myContext;
 
   @override
   void initState() {
@@ -23,8 +25,26 @@ class _FormDataInputViewState extends State<FormDataInputView> {
     }
   }
 
+  int addJsonMapEntry() {
+    jsonMapEntries.add(MapEntry('', ''));
+    return jsonMapEntries.length - 1;
+  }
+
   addRow({@required int index}) {
     rowList.add(TableRow(children: [
+      Container(
+          height: 50,
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                child: Icon(
+                  CupertinoIcons.delete, color: Colors.redAccent,
+                  size: 20,),
+                onTap: () {
+                  showAlertDialog(myContext, index);
+                },
+              )
+          )),
       forInputTextField(index, true),
       forInputTextField(index, false),
     ]));
@@ -37,22 +57,37 @@ class _FormDataInputViewState extends State<FormDataInputView> {
           ? jsonMapEntries[index].key.toString()
           : jsonMapEntries[index].value.toString(),
       decoration: InputDecoration(
-        border: InputBorder.none,
-      ),
+          border: InputBorder.none,
+          hintText: isKey ? 'Enter a key' : 'Enter a value',
+          hintStyle: TextStyle(color: Colors.grey)),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text here';
+        }
+        return null;
+      },
       onSaved: (newValue) {
+        String oldKey = jsonMapEntries[index].key.toString();
+        String oldValue = jsonMapEntries[index].value.toString();
+
         if (isKey) {
-          if (newValue != jsonMapEntries[index].key.toString()) {
+          if (newValue != oldKey) {
             jsonMapEntries.removeAt(index);
-            jsonMapEntries.insert(index,
-                MapEntry(newValue, jsonMapEntries[index].value.toString()));
+            jsonMapEntries.length != 0
+                ? jsonMapEntries.insert(index, MapEntry(newValue, oldValue))
+                : jsonMapEntries.add(MapEntry(newValue, oldValue));
           }
         } else {
-          if (newValue != jsonMapEntries[index].value.toString()) {
+          if (newValue != oldValue) {
             jsonMapEntries.removeAt(index);
-            jsonMapEntries.insert(index,
-                MapEntry(jsonMapEntries[index].key.toString(), newValue));
+            jsonMapEntries.length != 0
+                ? jsonMapEntries.insert(index, MapEntry(oldKey, newValue))
+                : jsonMapEntries.add(MapEntry(oldKey, newValue));
           }
         }
+
+        updateContentFromMap();
+        setState(() {});
       },
       cursorColor: Colors.white38,
       style: TextStyle(
@@ -64,44 +99,126 @@ class _FormDataInputViewState extends State<FormDataInputView> {
 
   @override
   Widget build(BuildContext context) {
+    myContext = context;
+
     return EditorWrapper(
-        child: EditorBackground(
-            false,
-            Theme(
-              data: Theme.of(context).copyWith(
-                dividerColor: Colors.white60,
-              ),
-              child: Table(
-                border: TableBorder(
-                    horizontalInside: BorderSide(
-                        width: 0.2,
-                        color: Colors.white38,
-                        style: BorderStyle.solid),
-                    bottom: BorderSide(
-                        width: 0.2,
-                        color: Colors.white38,
-                        style: BorderStyle.solid)),
-                children: [
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: Text('Key',
-                            style: TextStyle(
-                                color: Colors.white, fontFamily: 'monospace')),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: Text('Value',
-                            style: TextStyle(
-                                color: Colors.white, fontFamily: 'monospace')),
-                      ),
-                    ],
+        child: Column(
+          children: [
+            EditorBackground(
+                false,
+                Theme(
+                  data: Theme.of(context).copyWith(
+                    dividerColor: Colors.white60,
                   ),
-                  ...rowList,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 50),
+                    height: 300,
+                    child: Form(
+                      key: _formKey,
+                      child: Table(
+                        columnWidths: {
+                          0: FixedColumnWidth(60)
+                        },
+                        border: TableBorder(
+                            horizontalInside: BorderSide(
+                                width: 0.2,
+                                color: Colors.white38,
+                                style: BorderStyle.solid),
+                            bottom: BorderSide(
+                                width: 0.2,
+                                color: Colors.white38,
+                                style: BorderStyle.solid)),
+                        children: [
+                          TableRow(
+                            children: [
+                              Text(''),
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 15.0),
+                                child: Text('Key',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'monospace')),
+                              ),
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 15.0),
+                                child: Text('Value',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'monospace')),
+                              ),
+                            ],
+                          ),
+                          ...rowList,
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomIconButton(
+                      title: 'Add a Row',
+                      icon: CupertinoIcons.add_circled,
+                      onTap: () {
+                        addRow(index: addJsonMapEntry());
+                        setState(() {});
+                      }),
+                  CustomIconButton(
+                      title: 'Save',
+                      icon: CupertinoIcons.tray_full,
+                      onTap: () {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                        }
+                      }),
                 ],
               ),
-            )),
-        jsonParsingError: jsonParsingError);
+            )
+          ],
+        ),
+        jsonParsingError: jsonParsingError
+    );
+  }
+
+  deleteRow(int index){
+    jsonMapEntries.removeAt(index);
+    rowList.removeAt(index);
+    updateContentFromMap();
+    setState(() {});
+  }
+
+  showAlertDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete"),
+          content: Text("Would you like to delete this row?"),
+          actions: [
+            ElevatedButton(
+              child: Text("Cancel"),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateColor.resolveWith((states) => defaultColorEditor,),
+              ),
+              onPressed: () {Navigator.of(context).pop();},
+            ),
+            ElevatedButton(
+              child: Text("Continue"),
+              style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => defaultColorEditor)),
+              onPressed: () {
+                deleteRow(index);
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }
