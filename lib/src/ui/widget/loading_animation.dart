@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum LoadingAnimationType{
-  simple,
-  heavy
-}
+enum LoadingAnimationType { simple, heavy }
 
 class LoadingAnimation extends StatefulWidget {
   final Duration duration;
@@ -12,13 +9,19 @@ class LoadingAnimation extends StatefulWidget {
   final bool reverse;
   final LoadingAnimationType type;
 
-  LoadingAnimation({this.duration = const Duration(milliseconds: 1000), @required this.size, @required this.color, this.reverse = false, this.type = LoadingAnimationType.simple});
+  LoadingAnimation(
+      {this.duration = const Duration(milliseconds: 1000),
+      @required this.size,
+      @required this.color,
+      this.reverse = false,
+      this.type = LoadingAnimationType.simple});
 
   @override
   _LoadingAnimationState createState() => _LoadingAnimationState();
 }
 
-class _LoadingAnimationState extends State<LoadingAnimation> with SingleTickerProviderStateMixin {
+class _LoadingAnimationState extends State<LoadingAnimation>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _scaleAnimation;
   Animation<double> _rotateAnimation;
@@ -59,17 +62,16 @@ class _LoadingAnimationState extends State<LoadingAnimation> with SingleTickerPr
                       bottom: 0.0,
                       child: customCircle(
                           scaleAnimationValue: _scaleAnimation.value)),
-                  if(widget.type == LoadingAnimationType.heavy)
+                  if (widget.type == LoadingAnimationType.heavy)
                     Positioned(
                         left: 0.0,
                         child: customCircle(
-                            scaleAnimationValue: 1.0 - _scaleAnimation.value))
-                  ,
-                  if(widget.type == LoadingAnimationType.heavy)
-                  Positioned(
-                      right: 0.0,
-                      child: customCircle(
-                          scaleAnimationValue: _scaleAnimation.value)),
+                            scaleAnimationValue: 1.0 - _scaleAnimation.value)),
+                  if (widget.type == LoadingAnimationType.heavy)
+                    Positioned(
+                        right: 0.0,
+                        child: customCircle(
+                            scaleAnimationValue: _scaleAnimation.value)),
                 ],
               ),
             ),

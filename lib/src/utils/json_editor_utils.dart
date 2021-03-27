@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 
 const Color defaultColorEditor = Color(0xff2E3152);
@@ -7,6 +8,16 @@ const Color defaultColorFileName = Color(0xFF6CD07A);
 String email;
 
 String content = '{\n  "hello": "Hello World"\n}';
+List<MapEntry> jsonMapEntries = [MapEntry("hello", "Hello World")];
+
+void updateJsonContent(String value) {
+  content = value;
+  Map<String, dynamic> jsonContent = jsonDecode(value);
+  jsonMapEntries = [];
+  jsonContent.forEach((key, value) {
+    jsonMapEntries.add(MapEntry(key, value));
+  });
+}
 
 Map<String, String> locales = {
   "Afrikaans": "af",

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_localization_generator/src/ui/home_page.dart';
+import 'package:flutter_localization_generator/src/ui/pages/home_page.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 
 void main() async{

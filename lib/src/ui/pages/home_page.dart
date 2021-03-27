@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_localization_generator/src/views/raw_view.dart';
-import 'package:flutter_localization_generator/src/ui/downloading_page.dart';
-import 'package:flutter_localization_generator/src/views/form_data_view.dart';
-import 'package:flutter_localization_generator/src/views/upload_file_view.dart';
+import 'package:flutter_localization_generator/src/ui/views/raw_view.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
-import 'package:flutter_localization_generator/src/widget/custom_icon_button.dart';
+import 'package:flutter_localization_generator/src/ui/views/form_data_view.dart';
 import 'package:flutter_localization_generator/src/services/firebase_service.dart';
+import 'package:flutter_localization_generator/src/ui/pages/downloading_page.dart';
+import 'package:flutter_localization_generator/src/ui/views/upload_file_view.dart';
+import 'package:flutter_localization_generator/src/ui/widget/custom_icon_button.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

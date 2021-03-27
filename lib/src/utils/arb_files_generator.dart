@@ -3,22 +3,22 @@ import 'dart:html' as html;
 import 'package:translator/translator.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 
-Future<void> generate() async{
-  if(content.trim() != ''){
+Future<void> generate() async {
+  if (content.trim() != '') {
     Map<String, dynamic> decoded = json.decode(content);
 
-    for(var locale in toLocales){
-       String localeContent = '{\n  "@@locale": "$locale",\n';
+    for (var locale in toLocales) {
+      String localeContent = '{\n  "@@locale": "$locale",\n';
 
       var length = decoded.keys.length;
       var count = 0;
 
-      for(var key in decoded.keys){
+      for (var key in decoded.keys) {
         count++;
         localeContent += '\n  "$key": "'
             '${locale == fromLocale ? decoded[key] : await getTranslation(decoded[key], locale)}",\n  "@$key": {}';
 
-        if(length != count) content += ',';
+        if (length != count) content += ',';
 
         localeContent += '\n';
       }
@@ -29,7 +29,9 @@ Future<void> generate() async{
 
       html.AnchorElement(
         href: html.Url.createObjectUrlFromBlob(blob).toString(),
-      )..setAttribute("download", "app_$locale.arb")..click();
+      )
+        ..setAttribute("download", "app_$locale.arb")
+        ..click();
     }
   }
   toLocales.clear();
