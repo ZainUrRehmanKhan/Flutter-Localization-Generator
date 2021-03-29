@@ -3,7 +3,6 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localization_generator/src/ui/views/raw_view.dart';
-import 'package:flutter_localization_generator/src/utils/assets_const.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/ui/views/form_data_view.dart';
 import 'package:flutter_localization_generator/src/services/firebase_service.dart';

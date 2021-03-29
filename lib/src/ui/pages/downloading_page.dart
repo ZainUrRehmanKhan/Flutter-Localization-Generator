@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_localization_generator/src/utils/assets_const.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/utils/arb_files_generator.dart';
 import 'package:flutter_localization_generator/src/ui/widget/loading_animation.dart';
@@ -39,7 +38,7 @@ class _DownloadPageState extends State<DownloadPage> {
                     )
                   ]
                 : [
-                    Image.asset(completedTask, height: 50, width: 50),
+                    Icon(CupertinoIcons.checkmark_seal_fill, size: 40, color: defaultColorEditor),
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Text(
