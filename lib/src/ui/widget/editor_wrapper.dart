@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
+import 'package:flutter_localization_generator/src/utils/ui_utils.dart';
 
 class EditorWrapper extends StatefulWidget {
   final Widget child;
   final String jsonParsingError;
 
-  EditorWrapper({this.child, this.jsonParsingError});
+  EditorWrapper({@required this.child, this.jsonParsingError = ''});
 
   @override
   _EditorWrapperState createState() => _EditorWrapperState();
@@ -42,13 +43,14 @@ class _EditorWrapperState extends State<EditorWrapper> {
             color: Colors.white60,
           ),
           widget.child,
-          Container(
-            height: 30,
-            child: Center(
-                child: Text(
-              widget.jsonParsingError,
-              style: TextStyle(color: Colors.redAccent),
-            )),
+          Center(
+            child: Container(
+              height: 30,
+              child: Text(
+                widget.jsonParsingError,
+                style: TextStyle(color: Colors.redAccent),
+              ),
+            ),
           )
         ],
       ),

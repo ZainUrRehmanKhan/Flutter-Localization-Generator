@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_localization_generator/src/utils/json_formatter.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/ui/widget/editor_wrapper.dart';
 import 'package:flutter_localization_generator/src/ui/widget/editor_background.dart';
@@ -28,8 +26,8 @@ class _RawInputViewState extends State<RawInputView> {
       child: Stack(
         children: [
           EditorBackground(
-              edit,
-              edit
+              edit: edit,
+              child: edit
                   ? Container(
                       padding: EdgeInsets.only(
                         right: 10,
@@ -49,8 +47,8 @@ class _RawInputViewState extends State<RawInputView> {
                       ),
                     )
                   : Container(
-                    height: 350,
-                    child: Text(
+                      height: 350,
+                      child: Text(
                         '\n' + content,
                         style: TextStyle(
                             fontFamily: "monospace",
@@ -59,7 +57,7 @@ class _RawInputViewState extends State<RawInputView> {
                             fontSize: 13,
                             color: Colors.grey[200]),
                       ),
-                  )),
+                    )),
           editRawButton(),
         ],
       ),
@@ -80,8 +78,8 @@ class _RawInputViewState extends State<RawInputView> {
           try {
             edit = !edit;
             if (!edit) {
-              jsonDecode(jsonEditingController.text);
-              updateJsonContent(formatJson(jsonEditingController.text));
+              startNewJsonMapEntry();
+              updateJsonContent(jsonEditingController.text);
               jsonEditingController.text = content;
               jsonParsingError = '';
             }

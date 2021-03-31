@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:html' as html;
+import 'locale_utils.dart';
 import 'package:translator/translator.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 
@@ -41,7 +42,7 @@ Future<String> getTranslation(String text, String to) async {
   return (await text.translate(to: to, from: fromLocale)).text;
 }
 
-void exportJson(){
+void exportJson() {
   var blob = html.Blob([content], 'text/plain', 'native');
 
   html.AnchorElement(

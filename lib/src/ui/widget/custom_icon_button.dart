@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
+import 'package:flutter_localization_generator/src/utils/ui_utils.dart';
 
 class CustomIconButton extends StatefulWidget {
   final String title;
@@ -42,7 +42,10 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(widget.title,
-                style: TextStyle(color: Colors.grey[200], fontSize: 15, fontFamily: 'monospace')),
+                style: TextStyle(
+                    color: Colors.grey[200],
+                    fontSize: 15,
+                    fontFamily: 'monospace')),
             VerticalDivider(
               color: Colors.grey[200],
               width: 0.2,

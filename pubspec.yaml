@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   translator:
+  file_picker: ^3.0.0
   firebase_core:
   cloud_firestore:
 

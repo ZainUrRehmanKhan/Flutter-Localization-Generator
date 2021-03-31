@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_localization_generator/src/utils/ui_utils.dart';
 import 'package:flutter_localization_generator/src/ui/views/raw_view.dart';
+import 'package:flutter_localization_generator/src/utils/locale_utils.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/ui/views/form_data_view.dart';
 import 'package:flutter_localization_generator/src/services/firebase_service.dart';
@@ -43,9 +45,13 @@ class _MyHomePageState extends State<MyHomePage>
                 child: InkWell(
                   child: Image.asset(github),
                   onTap: () {
-                    html.window.open('https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator', 'Flutter Localization Generator');
+                    html.window.open(
+                        'https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator',
+                        'Flutter Localization Generator');
                   },
-                ), width: 30, height: 30,
+                ),
+                width: 30,
+                height: 30,
               ),
             )
           ],
@@ -70,7 +76,8 @@ class _MyHomePageState extends State<MyHomePage>
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(25)),
-                          border: Border.all(color: defaultColorEditor, width: 2),
+                          border:
+                              Border.all(color: defaultColorEditor, width: 2),
                         ),
                         child: TextField(
                           controller: emailEditingController,
@@ -95,7 +102,8 @@ class _MyHomePageState extends State<MyHomePage>
                           if (emailEditingController.text != '' &&
                               RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                   .hasMatch(emailEditingController.text)) {
-                            Map<String, dynamic> checkJson = jsonDecode(content);
+                            Map<String, dynamic> checkJson =
+                                jsonDecode(content);
                             if (checkJson.length == 0) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Not data found!')));
@@ -107,8 +115,8 @@ class _MyHomePageState extends State<MyHomePage>
                                 },
                               );
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Invalid Email Address!')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Invalid Email Address!')));
                           }
                         },
                       )
@@ -133,15 +141,18 @@ class _MyHomePageState extends State<MyHomePage>
                           tabs: [
                             Text(
                               'Form Data',
-                              style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                              style: TextStyle(
+                                  fontSize: 18, fontFamily: 'monospace'),
                             ),
                             Text(
                               'Raw',
-                              style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                              style: TextStyle(
+                                  fontSize: 18, fontFamily: 'monospace'),
                             ),
                             Text(
                               'Upload File',
-                              style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                              style: TextStyle(
+                                  fontSize: 18, fontFamily: 'monospace'),
                             ),
                           ],
                           indicatorColor: Colors.white,
@@ -150,15 +161,22 @@ class _MyHomePageState extends State<MyHomePage>
                         ),
                       ),
                       ElevatedButton.icon(
-                        onPressed: (){
+                        onPressed: () {
                           exportJson();
                         },
-                        icon: Icon(CupertinoIcons.arrow_down_doc, size: 15,),
-                        label: Text('Export', style: TextStyle(fontFamily: 'monospace'),),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-                          foregroundColor: MaterialStateColor.resolveWith((states) => defaultColorEditor)
+                        icon: Icon(
+                          CupertinoIcons.arrow_down_doc,
+                          size: 15,
                         ),
+                        label: Text(
+                          'Export',
+                          style: TextStyle(fontFamily: 'monospace'),
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateColor.resolveWith(
+                                (states) => Colors.white),
+                            foregroundColor: MaterialStateColor.resolveWith(
+                                (states) => defaultColorEditor)),
                       )
                     ],
                   ),
@@ -184,21 +202,49 @@ class _MyHomePageState extends State<MyHomePage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Designed & Developed By ', style: TextStyle(color: Colors.grey[500], fontFamily: 'monospace'),),
+                          Text(
+                            'Designed & Developed By ',
+                            style: TextStyle(
+                                color: Colors.grey[500],
+                                fontFamily: 'monospace'),
+                          ),
                           InkWell(
-                            child: Text('Zain Ur Rehman', style: TextStyle(color: defaultColorEditor, fontFamily: 'monospace'),),
-                            onTap: () => html.window.open('https://github.com/ZainUrRehmanKhan', 'Zain Ur Rehman'),
+                            child: Text(
+                              'Zain Ur Rehman',
+                              style: TextStyle(
+                                  color: defaultColorEditor,
+                                  fontFamily: 'monospace'),
+                            ),
+                            onTap: () => html.window.open(
+                                'https://github.com/ZainUrRehmanKhan',
+                                'Zain Ur Rehman'),
                           )
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.copyright_outlined, color: Colors.grey[500], size: 15,),
-                          Text(' 2021 copyright', style: TextStyle(color: Colors.grey[500], fontFamily: 'monospace'),),
+                          Icon(
+                            Icons.copyright_outlined,
+                            color: Colors.grey[500],
+                            size: 15,
+                          ),
+                          Text(
+                            ' 2021 copyright',
+                            style: TextStyle(
+                                color: Colors.grey[500],
+                                fontFamily: 'monospace'),
+                          ),
                           InkWell(
-                            child: Text(' SparkoSol, Pakistan', style: TextStyle(color: defaultColorEditor, fontFamily: 'monospace'),),
-                            onTap: () => html.window.open('https://github.com/SparcoT', 'SparkoSol, Pakistan'),
+                            child: Text(
+                              ' SparkoSol, Pakistan',
+                              style: TextStyle(
+                                  color: defaultColorEditor,
+                                  fontFamily: 'monospace'),
+                            ),
+                            onTap: () => html.window.open(
+                                'https://github.com/SparcoT',
+                                'SparkoSol, Pakistan'),
                           ),
                         ],
                       ),

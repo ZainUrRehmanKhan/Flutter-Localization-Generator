@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
+import 'package:flutter_localization_generator/src/utils/ui_utils.dart';
 
 class EditorBackground extends StatelessWidget {
   final bool edit;
-  final Widget childWidget;
+  final Widget child;
 
-  EditorBackground(this.edit, this.childWidget);
+  EditorBackground({this.edit = false, @required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class EditorBackground extends StatelessWidget {
         color: edit ? Colors.white : defaultColorEditor,
         border: Border(bottom: BorderSide(color: defaultColorBorder)),
       ),
-      child: SingleChildScrollView(child: childWidget),
+      child: SingleChildScrollView(child: child),
     );
   }
 }

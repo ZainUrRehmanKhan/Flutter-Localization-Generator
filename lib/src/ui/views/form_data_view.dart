@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widget/editor_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
+import 'package:flutter_localization_generator/src/ui/widget/dialog_button.dart';
+import 'package:flutter_localization_generator/src/ui/widget/editor_wrapper.dart';
 import 'package:flutter_localization_generator/src/ui/widget/editor_background.dart';
 import 'package:flutter_localization_generator/src/ui/widget/custom_icon_button.dart';
 
@@ -38,13 +39,14 @@ class _FormDataInputViewState extends State<FormDataInputView> {
               alignment: Alignment.centerLeft,
               child: InkWell(
                 child: Icon(
-                  CupertinoIcons.delete, color: Colors.redAccent,
-                  size: 20,),
+                  CupertinoIcons.delete,
+                  color: Colors.redAccent,
+                  size: 20,
+                ),
                 onTap: () {
                   showAlertDialog(myContext, index);
                 },
-              )
-          )),
+              ))),
       forInputTextField(index, true),
       forInputTextField(index, false),
     ]));
@@ -105,58 +107,52 @@ class _FormDataInputViewState extends State<FormDataInputView> {
         child: Column(
           children: [
             EditorBackground(
-                false,
-                Theme(
-                  data: Theme.of(context).copyWith(
-                    dividerColor: Colors.white60,
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 50),
-                    height: 300,
-                    child: Form(
-                      key: _formKey,
-                      child: Table(
-                        columnWidths: {
-                          0: FixedColumnWidth(60)
-                        },
-                        border: TableBorder(
-                            horizontalInside: BorderSide(
-                                width: 0.2,
-                                color: Colors.white38,
-                                style: BorderStyle.solid),
-                            bottom: BorderSide(
-                                width: 0.2,
-                                color: Colors.white38,
-                                style: BorderStyle.solid)),
+                child: Theme(
+              data: Theme.of(context).copyWith(
+                dividerColor: Colors.white60,
+              ),
+              child: Container(
+                margin: EdgeInsets.only(bottom: 50),
+                height: 300,
+                child: Form(
+                  key: _formKey,
+                  child: Table(
+                    columnWidths: {0: FixedColumnWidth(60)},
+                    border: TableBorder(
+                        horizontalInside: BorderSide(
+                            width: 0.2,
+                            color: Colors.white38,
+                            style: BorderStyle.solid),
+                        bottom: BorderSide(
+                            width: 0.2,
+                            color: Colors.white38,
+                            style: BorderStyle.solid)),
+                    children: [
+                      TableRow(
                         children: [
-                          TableRow(
-                            children: [
-                              Text(''),
-                              Padding(
-                                padding:
-                                const EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text('Key',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'monospace')),
-                              ),
-                              Padding(
-                                padding:
-                                const EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text('Value',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'monospace')),
-                              ),
-                            ],
+                          Text(''),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            child: Text('Key',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'monospace')),
                           ),
-                          ...rowList,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            child: Text('Value',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'monospace')),
+                          ),
                         ],
                       ),
-                    ),
+                      ...rowList,
+                    ],
                   ),
-                )
-            ),
+                ),
+              ),
+            )),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Row(
@@ -182,11 +178,10 @@ class _FormDataInputViewState extends State<FormDataInputView> {
             )
           ],
         ),
-        jsonParsingError: jsonParsingError
-    );
+        jsonParsingError: jsonParsingError);
   }
 
-  deleteRow(int index){
+  deleteRow(int index) {
     jsonMapEntries.removeAt(index);
     rowList.removeAt(index);
     updateContentFromMap();
@@ -201,21 +196,17 @@ class _FormDataInputViewState extends State<FormDataInputView> {
           title: Text("Delete"),
           content: Text("Would you like to delete this row?"),
           actions: [
-            ElevatedButton(
-              child: Text("Cancel"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateColor.resolveWith((states) => defaultColorEditor,),
-              ),
-              onPressed: () {Navigator.of(context).pop();},
-            ),
-            ElevatedButton(
-              child: Text("Continue"),
-              style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => defaultColorEditor)),
-              onPressed: () {
-                deleteRow(index);
-                Navigator.of(context).pop();
-              },
-            )
+            DialogButton(
+                title: 'Cancel',
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+            DialogButton(
+                title: 'Continue',
+                onPressed: () {
+                  deleteRow(index);
+                  Navigator.of(context).pop();
+                }),
           ],
         );
       },

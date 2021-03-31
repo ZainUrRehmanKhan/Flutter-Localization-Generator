@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
+import 'package:flutter_localization_generator/src/utils/ui_utils.dart';
 
 Future<void> addUser() async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
