@@ -39,19 +39,15 @@
   <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
   <!-- TODO: Add SDKs for Firebase products that you want to use
        https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="/__/firebase/8.3.1/firebase-analytics.js"></script>
+  <!-- Firebase credentials & configuration (Changed after exposing on github)-->
+
+  <script src="web/credentials.js"></script>
 
   <script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-      apiKey: "AIzaSyCBauldaoR_zNF2sBatyWjQIP5Vp1Y5838",
-      authDomain: "flutter-localization-generator.firebaseapp.com",
-      projectId: "flutter-localization-generator",
-      storageBucket: "flutter-localization-generator.appspot.com",
-      messagingSenderId: "459237899491",
-      appId: "1:459237899491:web:2d60b20dc43ad4dca7d9d6"
-    };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
   </script>
   <script>
     if ('serviceWorker' in navigator) {
