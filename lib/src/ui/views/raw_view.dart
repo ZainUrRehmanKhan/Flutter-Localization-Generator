@@ -29,13 +29,13 @@ class _RawInputViewState extends State<RawInputView> {
               edit: edit,
               child: edit
                   ? Container(
-                      padding: EdgeInsets.only(
+                padding: EdgeInsets.only(
                         right: 10,
                         left: 10,
                         top: 10,
                         bottom: 50,
                       ),
-                      height: 400,
+                      height: 350,
                       child: TextField(
                         maxLines: 1000,
                         decoration: InputDecoration(border: InputBorder.none),
@@ -47,7 +47,7 @@ class _RawInputViewState extends State<RawInputView> {
                       ),
                     )
                   : Container(
-                      height: 350,
+                height: 350,
                       child: Text(
                         '\n' + content,
                         style: TextStyle(
@@ -82,6 +82,7 @@ class _RawInputViewState extends State<RawInputView> {
               updateJsonContent(jsonEditingController.text);
               jsonEditingController.text = content;
               jsonParsingError = '';
+              setState(() {});
             }
           } catch (e) {
             edit = !edit;

@@ -11,27 +11,28 @@ class FormDataInputView extends StatefulWidget {
   _FormDataInputViewState createState() => _FormDataInputViewState();
 }
 
-class _FormDataInputViewState extends State<FormDataInputView> {
+class _FormDataInputViewState extends State<FormDataInputView>{
   String jsonParsingError = '';
   final _formKey = GlobalKey<FormState>();
   List<TableRow> rowList = [];
-  BuildContext myContext;
 
   @override
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      generateTableRows();
+    });
+  }
+
+  void generateTableRows() {
+    rowList = [];
     for (var index = 0; index < jsonMapEntries.length; ++index) {
       addRow(index: index);
     }
   }
 
-  int addJsonMapEntry() {
-    jsonMapEntries.add(MapEntry('', ''));
-    return jsonMapEntries.length - 1;
-  }
-
-  addRow({@required int index}) {
+  void addRow({@required int index}) {
     rowList.add(TableRow(children: [
       Container(
           height: 50,
@@ -44,20 +45,36 @@ class _FormDataInputViewState extends State<FormDataInputView> {
                   size: 20,
                 ),
                 onTap: () {
-                  showAlertDialog(myContext, index);
+                  checkIndexExists(index) ? showDeleteRowDialog(context, index) : deleteRow(index);
                 },
               ))),
-      forInputTextField(index, true),
-      forInputTextField(index, false),
+      rowInputTextField(index, true),
+      rowInputTextField(index, false),
     ]));
     setState(() {});
   }
 
-  Widget forInputTextField(int index, bool isKey) {
+  ///TODO Row Deletion problem
+  ///TODO problem while deleting non saved rows (delete second last and then last for exception)
+
+  void deleteRow(int index) {
+    rowList.removeAt(index);
+    if(checkIndexExists(index)){
+      jsonMapEntries.removeAt(index);
+      updateContentFromMap();
+    }
+    setState(() {});
+  }
+
+  bool checkIndexExists(int index){
+    return !(index >= jsonMapEntries.length);
+  }
+
+  TextFormField rowInputTextField(int index, bool isKey) {
     return TextFormField(
       initialValue: isKey
-          ? jsonMapEntries[index].key.toString()
-          : jsonMapEntries[index].value.toString(),
+          ? checkIndexExists(index) ? jsonMapEntries[index].key.toString() : ''
+          : checkIndexExists(index) ? jsonMapEntries[index].value.toString() : '',
       decoration: InputDecoration(
           border: InputBorder.none,
           hintText: isKey ? 'Enter a key' : 'Enter a value',
@@ -69,8 +86,15 @@ class _FormDataInputViewState extends State<FormDataInputView> {
         return null;
       },
       onSaved: (newValue) {
-        String oldKey = jsonMapEntries[index].key.toString();
-        String oldValue = jsonMapEntries[index].value.toString();
+        String oldKey = '';
+        String oldValue = '';
+        if(index >= jsonMapEntries.length){
+          jsonMapEntries.add(MapEntry('', ''));
+        }
+        else{
+          oldKey = jsonMapEntries[index].key.toString();
+          oldValue = jsonMapEntries[index].value.toString();
+        }
 
         if (isKey) {
           if (newValue != oldKey) {
@@ -87,9 +111,6 @@ class _FormDataInputViewState extends State<FormDataInputView> {
                 : jsonMapEntries.add(MapEntry(oldKey, newValue));
           }
         }
-
-        updateContentFromMap();
-        setState(() {});
       },
       cursorColor: Colors.white38,
       style: TextStyle(
@@ -101,8 +122,6 @@ class _FormDataInputViewState extends State<FormDataInputView> {
 
   @override
   Widget build(BuildContext context) {
-    myContext = context;
-
     return EditorWrapper(
         child: Column(
           children: [
@@ -112,43 +131,44 @@ class _FormDataInputViewState extends State<FormDataInputView> {
                 dividerColor: Colors.white60,
               ),
               child: Container(
-                margin: EdgeInsets.only(bottom: 50),
-                height: 300,
+                height: 350,
                 child: Form(
                   key: _formKey,
-                  child: Table(
-                    columnWidths: {0: FixedColumnWidth(60)},
-                    border: TableBorder(
-                        horizontalInside: BorderSide(
-                            width: 0.2,
-                            color: Colors.white38,
-                            style: BorderStyle.solid),
-                        bottom: BorderSide(
-                            width: 0.2,
-                            color: Colors.white38,
-                            style: BorderStyle.solid)),
-                    children: [
-                      TableRow(
-                        children: [
-                          Text(''),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15.0),
-                            child: Text('Key',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'monospace')),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15.0),
-                            child: Text('Value',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'monospace')),
-                          ),
-                        ],
-                      ),
-                      ...rowList,
-                    ],
+                  child: SingleChildScrollView(
+                    child: Table(
+                      columnWidths: {0: FixedColumnWidth(60)},
+                      border: TableBorder(
+                          horizontalInside: BorderSide(
+                              width: 0.2,
+                              color: Colors.white38,
+                              style: BorderStyle.solid),
+                          bottom: BorderSide(
+                              width: 0.2,
+                              color: Colors.white38,
+                              style: BorderStyle.solid)),
+                      children: [
+                        TableRow(
+                          children: [
+                            Text(''),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Text('Key',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'monospace')),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Text('Value',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'monospace')),
+                            ),
+                          ],
+                        ),
+                        ...rowList,
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -162,7 +182,7 @@ class _FormDataInputViewState extends State<FormDataInputView> {
                       title: 'Add a Row',
                       icon: CupertinoIcons.add_circled,
                       onTap: () {
-                        addRow(index: addJsonMapEntry());
+                        addRow(index: rowList.length);
                         setState(() {});
                       }),
                   CustomIconButton(
@@ -171,6 +191,8 @@ class _FormDataInputViewState extends State<FormDataInputView> {
                       onTap: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
+                          updateContentFromMap();
+                          setState(() {});
                         }
                       }),
                 ],
@@ -181,32 +203,27 @@ class _FormDataInputViewState extends State<FormDataInputView> {
         jsonParsingError: jsonParsingError);
   }
 
-  deleteRow(int index) {
-    jsonMapEntries.removeAt(index);
-    rowList.removeAt(index);
-    updateContentFromMap();
-    setState(() {});
-  }
-
-  showAlertDialog(BuildContext context, int index) {
+  void showDeleteRowDialog(BuildContext context, int index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Delete"),
-          content: Text("Would you like to delete this row?"),
+          content: Text("Are you sure you want to delete this row,\nthis action will discard unsaved changes?"),
           actions: [
             DialogButton(
-                title: 'Cancel',
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }),
+              title: 'Cancel',
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            ),
             DialogButton(
-                title: 'Continue',
-                onPressed: () {
-                  deleteRow(index);
-                  Navigator.of(context).pop();
-                }),
+              title: 'Continue',
+              onPressed: () {
+                deleteRow(index);
+                Navigator.of(context).pop();
+              }
+            ),
           ],
         );
       },

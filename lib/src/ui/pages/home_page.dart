@@ -7,9 +7,9 @@ import 'package:flutter_localization_generator/src/ui/views/raw_view.dart';
 import 'package:flutter_localization_generator/src/utils/locale_utils.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 import 'package:flutter_localization_generator/src/ui/views/form_data_view.dart';
+import 'package:flutter_localization_generator/src/utils/export_json_content.dart';
 import 'package:flutter_localization_generator/src/services/firebase_service.dart';
 import 'package:flutter_localization_generator/src/ui/pages/downloading_page.dart';
-import 'package:flutter_localization_generator/src/utils/arb_files_generator.dart';
 import 'package:flutter_localization_generator/src/ui/views/upload_file_view.dart';
 import 'package:flutter_localization_generator/src/ui/widget/custom_icon_button.dart';
 
@@ -160,12 +160,14 @@ class _MyHomePageState extends State<MyHomePage>
                           controller: tabController,
                         ),
                       ),
+                      ///TODO add change input locale button here
                       ElevatedButton.icon(
                         onPressed: () {
                           exportJson();
                         },
                         icon: Icon(
-                          CupertinoIcons.arrow_down_doc,
+                          CupertinoIcons.arrow_down_doc_fill,
+                          color: defaultColorEditor,
                           size: 15,
                         ),
                         label: Text(

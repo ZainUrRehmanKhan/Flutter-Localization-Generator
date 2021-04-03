@@ -11,14 +11,15 @@ void updateContentFromMap(){
   content = formatJson(json.encode(map));
 }
 
+///TODO fix jsonDecode rearrangement issue
+
 Future<void> updateJsonContent(String value) async {
   try{
     Map<String, dynamic> jsonContent = await jsonDecode(value);
     jsonContent.forEach((key, value) {
       jsonMapEntries.add(MapEntry(key, value));
     });
-
-    updateContentFromMap();
+    content = formatJson(value);
   } catch(e){
     throw e;
   }
