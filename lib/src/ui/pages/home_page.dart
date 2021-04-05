@@ -232,21 +232,21 @@ class _MyHomePageState extends State<MyHomePage>
                             size: 15,
                           ),
                           Text(
-                            ' 2021 copyright',
+                            '2021 copyright',
                             style: TextStyle(
                                 color: Colors.grey[500],
                                 fontFamily: 'monospace'),
                           ),
                           InkWell(
                             child: Text(
-                              ' SparkoSol, Pakistan',
+                              ' SparkoSol',
                               style: TextStyle(
                                   color: defaultColorEditor,
                                   fontFamily: 'monospace'),
                             ),
                             onTap: () => html.window.open(
                                 'https://github.com/SparcoT',
-                                'SparkoSol, Pakistan'),
+                                'SparkoSol'),
                           ),
                         ],
                       ),
