@@ -160,6 +160,7 @@ class _MyHomePageState extends State<MyHomePage>
                           controller: tabController,
                         ),
                       ),
+
                       ///TODO add change input locale button here
                       ElevatedButton.icon(
                         onPressed: () {
@@ -245,8 +246,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   fontFamily: 'monospace'),
                             ),
                             onTap: () => html.window.open(
-                                'https://github.com/SparcoT',
-                                'SparkoSol'),
+                                'https://github.com/SparcoT', 'SparkoSol'),
                           ),
                         ],
                       ),
