@@ -39,9 +39,19 @@ A Flutter Web Application that can generate .arb (Localization) files in 109 loc
 ![SelectLocale](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/select-locale.JPG?raw=true)
 
 
->Done, the downloading will start automatically
+> Done, the downloading will start automatically
 
 ![Done](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/done.JPG?raw=true)
+
+
+> Result 
+
+![Result](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/result.JPG?raw=true)
+
+
+> You can also export your JSON from here:
+
+![Export](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/result.JPG?raw=true)
 
 
 ## Tech
