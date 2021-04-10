@@ -1,16 +1,68 @@
-# flutter_localization_generator
+# Flutter Localization Generator
 
-A new Flutter project.
+A Flutter Web Application that can generate .arb (Localization) files in 109 locales automatically from JSON.
 
-## Getting Started
+> - 109 locales
+> - Easy to use
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+> - Import/Drag and drop a JSON file, click generate and watch it magically convert to .arb files
+> - You can edit JSON using Form Data/Raw editor
+> - Export JSON after editing for future use
+> - Select multiple locales at once
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## How to use
+> **Go to the [Web App]**  
+> Three modes available to write or import JSON, you can also edit JSON after importing from the file
+## 1 - Form Data
+![FormData](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/formdata.JPG?raw=true)
+
+## 2 - Raw editor
+![RawEditor](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/raw.JPG?raw=true)
+
+## 3 - UploadFile
+> Note: You can also use FormData/Raw editor to edit JSON after upload
+
+![Upload](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/uploadfile.JPG?raw=true)
+
+> Enter you email and click Generate (email is just for the newsletter)
+
+![Generate](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/generate.JPG?raw=true)
+> Select one or more locales and proceed
+
+![SelectLocale](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/select-locale.JPG?raw=true)
+>Done, the downloading will start automatically
+
+![Done](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/done.JPG?raw=true)
+
+
+## Tech
+
+Flutter localization generator uses a number of open source projects to work properly:
+
+> - [Flutter] - Flutter makes it easy and fast to build beautiful apps for mobile and beyond!
+> - [Translator] - Google Translate API for Dart
+
+## Contribute
+
+Want to contribute? Great just three steps to follow!
+
+> - Fork this repository
+> - Create a branch, do changes
+> - Create a pull request
+
+
+## License
+
+> - MIT
+> - 2021 copyright [SparkoSol]
+
+**Free Software, Hell Yeah!**
+
+[Flutter]: <https://flutter.dev/>
+[Translator]: <https://pub.dev/packages/translator>
+[SparkoSol]: <https://github.com/SparcoT>
+[Web App]: <https://localization-generator-flutter.web.app/>
