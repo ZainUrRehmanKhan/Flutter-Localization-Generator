@@ -19,8 +19,7 @@ Future<void> generate() async {
         localeContent += '\n  "$key": "'
             '${locale == fromLocale ? decoded[key] : await getTranslation(decoded[key], locale)}",\n  "@$key": {}';
 
-        if (length != count) content += ',';
-
+        if (length != count) localeContent += ',';
         localeContent += '\n';
       }
 
