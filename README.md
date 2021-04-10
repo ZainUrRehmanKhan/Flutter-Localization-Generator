@@ -28,12 +28,17 @@ A Flutter Web Application that can generate .arb (Localization) files in 109 loc
 
 ![Upload](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/uploadfile.JPG?raw=true)
 
+
 > Enter you email and click Generate (email is just for the newsletter)
 
 ![Generate](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/generate.JPG?raw=true)
+
+
 > Select one or more locales and proceed
 
 ![SelectLocale](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/select-locale.JPG?raw=true)
+
+
 >Done, the downloading will start automatically
 
 ![Done](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/done.JPG?raw=true)
