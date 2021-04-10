@@ -1,5 +1,5 @@
 
-![logo](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/logo.png?raw=true =100x)
+![logo](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/logo.png?raw=true)
 # Flutter Localization Generator
 
 A Flutter Web Application that can generate .arb (Localization) files in 109 locales automatically from JSON.
