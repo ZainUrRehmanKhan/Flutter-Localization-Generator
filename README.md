@@ -21,7 +21,7 @@ A Flutter Web Application that can generate .arb (Localization) files in 109 loc
 ## 1 - Form Data
 ![FormData](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/formdata.JPG?raw=true)
 
-## 2 - Raw editor  ![enter image description here](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/formdata.JPG?raw=true)
+## 2 - Raw editor
 ![RawEditor](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/raw.JPG?raw=true)
 
 ## 3 - UploadFile
