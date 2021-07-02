@@ -8,12 +8,13 @@ String formatJson(String jsonText) {
 
   rawJson.forEach((key, value) {
     count++;
-    formattedJson += '  "$key": "$value"';
+    formattedJson += '  "$key": "${value.replaceAll("'", "\'")}"';
     if (count != length)
       formattedJson += ',\n';
     else
       formattedJson += '\n';
   });
   formattedJson += '}';
+
   return formattedJson;
 }

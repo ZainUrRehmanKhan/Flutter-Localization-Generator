@@ -17,50 +17,61 @@ class _RawInputViewState extends State<RawInputView> {
   @override
   void initState() {
     super.initState();
-    jsonEditingController.text = content;
+
+    final buffer = StringBuffer('{\n');
+    for (final iterator = jsonMapEntries.iterator..moveNext();;) {
+      final element = iterator.current;
+
+      buffer.write('  "${element.first}": "${element.second}"');
+      if (iterator.moveNext()) {
+        buffer.writeln(',');
+      } else {
+        buffer.writeln();
+        break;
+      }
+    }
+
+    buffer.writeln('}');
+    jsonEditingController.text = buffer.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return EditorWrapper(
-      child: Stack(
-        children: [
-          EditorBackground(
-              edit: edit,
-              child: edit
-                  ? Container(
-                padding: EdgeInsets.only(
-                        right: 10,
-                        left: 10,
-                        top: 10,
-                        bottom: 50,
-                      ),
-                      height: 350,
-                      child: TextField(
-                        maxLines: 1000,
-                        decoration: InputDecoration(border: InputBorder.none),
-                        controller: jsonEditingController,
-                        cursorColor: Colors.green,
-                        autofocus: true,
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w200),
-                      ),
-                    )
-                  : Container(
-                height: 350,
-                      child: Text(
-                        '\n' + content,
-                        style: TextStyle(
-                            fontFamily: "monospace",
-                            letterSpacing: 1.0,
-                            fontWeight: FontWeight.w100,
-                            fontSize: 13,
-                            color: Colors.grey[200]),
-                      ),
-                    )),
-          editRawButton(),
-        ],
-      ),
+      children: [
+        EditorBackground(
+          edit: edit,
+          child: Container(
+            padding: EdgeInsets.only(
+              right: 10,
+              left: 10,
+              top: 10,
+              bottom: 50,
+            ),
+            child: TextField(
+              maxLines: 1000,
+              readOnly: !edit,
+              decoration: InputDecoration(border: InputBorder.none),
+              controller: jsonEditingController,
+              cursorColor: Colors.green,
+              autofocus: true,
+              style: TextStyle(
+                fontFamily: 'JetBrainsMono',
+                fontSize: 13,
+                color: edit ? Colors.black : Colors.white,
+                fontWeight: FontWeight.w200,
+              ),
+            ),
+          ),
+        ),
+        Transform.translate(
+          offset: Offset(-20, -40),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: editRawButton(),
+          ),
+        ),
+      ],
       jsonParsingError: jsonParsingError,
     );
   }
@@ -70,41 +81,37 @@ class _RawInputViewState extends State<RawInputView> {
   ///
   /// This button won't appear if `edit = false`.
   Widget editRawButton() {
-    return Positioned(
-      bottom: 10,
-      right: 15,
-      child: ElevatedButton(
-        onPressed: () {
-          try {
-            edit = !edit;
-            if (!edit) {
-              startNewJsonMapEntry();
-              updateJsonContent(jsonEditingController.text);
-              jsonEditingController.text = content;
-              jsonParsingError = '';
-              setState(() {});
-            }
-          } catch (e) {
-            edit = !edit;
-            jsonParsingError = e.toString();
+    return ElevatedButton(
+      onPressed: () {
+        try {
+          edit = !edit;
+          if (!edit) {
+            startNewJsonMapEntry();
+            updateJsonContent(jsonEditingController.text);
+            jsonParsingError = '';
+            setState(() {});
           }
-          setState(() {});
-        },
-        child: Text(
-          edit ? 'Save' : 'Edit',
-          style: TextStyle(
-            fontSize: 16.0,
-            fontFamily: "monospace",
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-          ),
+        } on FormatException catch (e) {
+          edit = !edit;
+          jsonParsingError = e.toString();
+          print(jsonParsingError);
+        }
+        setState(() {});
+      },
+      child: Text(
+        edit ? 'Save' : 'Edit',
+        style: TextStyle(
+          fontSize: 16.0,
+          fontFamily: "monospace",
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
         ),
-        style: ButtonStyle(
-            backgroundColor:
-                MaterialStateColor.resolveWith((states) => Colors.grey[200]),
-            minimumSize:
-                MaterialStateProperty.resolveWith((states) => Size(90, 35))),
       ),
+      style: ButtonStyle(
+          backgroundColor:
+              MaterialStateColor.resolveWith((states) => Colors.grey[200]),
+          minimumSize:
+              MaterialStateProperty.resolveWith((states) => Size(90, 35))),
     );
   }
 }

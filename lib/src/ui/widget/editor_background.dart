@@ -10,14 +10,17 @@ class EditorBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: edit ? Colors.white : defaultColorEditor,
-        border: Border(bottom: BorderSide(color: defaultColorBorder)),
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: edit ? Colors.white : defaultColorEditor,
+          border: Border(bottom: BorderSide(color: defaultColorBorder)),
+        ),
+        child: child,
+        // child: SingleChildScrollView(child: child),
       ),
-      child: SingleChildScrollView(child: child),
     );
   }
 }

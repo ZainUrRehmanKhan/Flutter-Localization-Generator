@@ -4,10 +4,10 @@ import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart'
 import 'package:flutter_localization_generator/src/utils/ui_utils.dart';
 
 class EditorWrapper extends StatefulWidget {
-  final Widget child;
+  final List<Widget> children;
   final String jsonParsingError;
 
-  EditorWrapper({@required this.child, this.jsonParsingError = ''});
+  EditorWrapper({@required this.children, this.jsonParsingError = ''});
 
   @override
   _EditorWrapperState createState() => _EditorWrapperState();
@@ -16,44 +16,43 @@ class EditorWrapper extends StatefulWidget {
 class _EditorWrapperState extends State<EditorWrapper> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 22, horizontal: 15),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: defaultColorEditor,
-              border: Border(bottom: BorderSide(color: defaultColorBorder)),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 22, horizontal: 15),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: defaultColorEditor,
+            border: Border(bottom: BorderSide(color: defaultColorBorder)),
+          ),
+          child: Text(
+            fileName,
+            style: TextStyle(
+              fontFamily: "monospace",
+              letterSpacing: 1.0,
+              fontWeight: FontWeight.normal,
+              fontSize: 14,
+              color: defaultColorFileName,
             ),
+          ),
+        ),
+        Divider(
+          height: 0.1,
+          thickness: 0.1,
+          color: Colors.white60,
+        ),
+        ...widget.children,
+        Center(
+          child: Container(
+            height: 30,
             child: Text(
-              fileName,
-              style: TextStyle(
-                  fontFamily: "monospace",
-                  letterSpacing: 1.0,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 14,
-                  color: defaultColorFileName),
+              widget.jsonParsingError,
+              style: TextStyle(color: Colors.redAccent),
             ),
           ),
-          Divider(
-            height: 0.1,
-            thickness: 0.1,
-            color: Colors.white60,
-          ),
-          widget.child,
-          Center(
-            child: Container(
-              height: 30,
-              child: Text(
-                widget.jsonParsingError,
-                style: TextStyle(color: Colors.redAccent),
-              ),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

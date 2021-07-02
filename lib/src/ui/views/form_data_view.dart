@@ -44,134 +44,127 @@ class _FormDataInputViewState extends State<FormDataInputView> {
   @override
   Widget build(BuildContext context) {
     return EditorWrapper(
-        child: Column(
-          children: [
-            EditorBackground(
-                child: Theme(
-              data: Theme.of(context).copyWith(
-                dividerColor: Colors.white60,
-              ),
-              child: Container(
-                height: 350,
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Table(
-                      columnWidths: {0: FixedColumnWidth(60)},
-                      border: TableBorder(
-                        horizontalInside: BorderSide(
-                          width: 0.2,
-                          color: Colors.white38,
-                          style: BorderStyle.solid,
-                        ),
-                        bottom: BorderSide(
-                          width: 0.2,
-                          color: Colors.white38,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      children: [
-                        TableRow(
-                          children: [
-                            Text(''),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 15.0),
-                              child: Text(
-                                'Key',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'monospace',
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 15.0),
-                              child: Text(
-                                'Value',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'monospace',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        for (final row in jsonMapEntries)
-                          TableRow(
-                            children: [
-                              Container(
-                                height: 50,
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: InkWell(
-                                    child: Icon(
-                                      CupertinoIcons.delete,
-                                      color: Colors.redAccent,
-                                      size: 20,
-                                    ),
-                                    onTap: () {
-                                      showDeleteRowDialog(context, () {
-                                        jsonMapEntries.remove(row);
-                                        jsonMapEntries =
-                                            List.from(jsonMapEntries);
-                                        updateContentFromMap();
-                                        setState(() {});
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                              rowInputTextField(
-                                row.first,
-                                'Enter Key',
-                                TextEditingController(text: row.first),
-                                (val) => row.first = val,
-                              ),
-                              rowInputTextField(
-                                row.second,
-                                'Enter Value',
-                                TextEditingController(text: row.second),
-                                (val) => row.second = val,
-                              )
-                            ],
-                          ),
-                      ],
-                    ),
+      children: [
+        EditorBackground(
+            child: Theme(
+          data: Theme.of(context).copyWith(
+            dividerColor: Colors.white60,
+          ),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Table(
+                columnWidths: {0: FixedColumnWidth(60)},
+                border: TableBorder(
+                  horizontalInside: BorderSide(
+                    width: 0.2,
+                    color: Colors.white38,
+                    style: BorderStyle.solid,
+                  ),
+                  bottom: BorderSide(
+                    width: 0.2,
+                    color: Colors.white38,
+                    style: BorderStyle.solid,
                   ),
                 ),
-              ),
-            )),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomIconButton(
-                    title: 'Add a Row',
-                    icon: CupertinoIcons.add_circled,
-                    onTap: () {
-                      _formKey.currentState.save();
-                      jsonMapEntries.add(Tuple('', ''));
-                      setState(() {});
-                    },
+                  TableRow(
+                    children: [
+                      Text(''),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Text(
+                          'Key',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Text(
+                          'Value',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  CustomIconButton(
-                      title: 'Save',
-                      icon: CupertinoIcons.tray_full,
-                      onTap: () {
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          updateContentFromMap();
-                        }
-                      }),
+                  for (final row in jsonMapEntries)
+                    TableRow(
+                      children: [
+                        Container(
+                          height: 50,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: InkWell(
+                              child: Icon(
+                                CupertinoIcons.delete,
+                                color: Colors.redAccent,
+                                size: 20,
+                              ),
+                              onTap: () {
+                                showDeleteRowDialog(context, () {
+                                  jsonMapEntries.remove(row);
+                                  jsonMapEntries = List.from(jsonMapEntries);
+                                  setState(() {});
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        rowInputTextField(
+                          row.first,
+                          'Enter Key',
+                          TextEditingController(text: row.first),
+                          (val) => row.first = val,
+                        ),
+                        rowInputTextField(
+                          row.second,
+                          'Enter Value',
+                          TextEditingController(text: row.second),
+                          (val) {
+                            return row.second = val;
+                          },
+                        )
+                      ],
+                    ),
                 ],
               ),
-            )
-          ],
-        ),
-        jsonParsingError: jsonParsingError);
+            ),
+          ),
+        )),
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomIconButton(
+                title: 'Add a Row',
+                icon: CupertinoIcons.add_circled,
+                onTap: () {
+                  _formKey.currentState.save();
+                  jsonMapEntries.add(Tuple('', ''));
+                  setState(() {});
+                },
+              ),
+              CustomIconButton(
+                  title: 'Save',
+                  icon: CupertinoIcons.tray_full,
+                  onTap: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                    }
+                  }),
+            ],
+          ),
+        )
+      ],
+      jsonParsingError: jsonParsingError,
+    );
   }
 
   void showDeleteRowDialog(BuildContext context, VoidCallback onConfirmed) {

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,206 +55,198 @@ class _MyHomePageState extends State<MyHomePage>
             )
           ],
         ),
-        body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: SizedBox(
-            height: 735,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                  child: Row(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ///
+                  /// Email Text Field
+                  ///
+                  Container(
+                    width: 350,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                      border:
+                          Border.all(color: defaultColorEditor, width: 2),
+                    ),
+                    child: TextField(
+                      controller: emailEditingController,
+                      onChanged: (value) async {
+                        email = emailEditingController.text;
+                      },
+                      cursorColor: defaultColorEditor,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'youremail@email.com',
+                          hintStyle: TextStyle(color: Colors.grey[400])),
+                    ),
+                  ),
+
+                  ///
+                  /// Generate Button
+                  ///
+                  CustomIconButton(
+                    title: 'Generate',
+                    icon: CupertinoIcons.gear,
+                    onTap: () {
+                      if (emailEditingController.text != '' &&
+                          RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(emailEditingController.text)) {
+                        if (jsonMapEntries.length == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Not data found!')));
+                        } else
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return localeDialog();
+                            },
+                          );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Invalid Email Address!')));
+                      }
+                    },
+                  )
+                ],
+              ),
+            ),
+            Divider(
+              height: 0.1,
+              thickness: 0.1,
+              color: defaultColorEditor,
+            ),
+            Container(
+              color: defaultColorEditor,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    height: 60,
+                    child: TabBar(
+                      tabs: [
+                        Text(
+                          'Form Data',
+                          style: TextStyle(
+                              fontSize: 18, fontFamily: 'monospace'),
+                        ),
+                        Text(
+                          'Raw',
+                          style: TextStyle(
+                              fontSize: 18, fontFamily: 'monospace'),
+                        ),
+                        Text(
+                          'Upload File',
+                          style: TextStyle(
+                              fontSize: 18, fontFamily: 'monospace'),
+                        ),
+                      ],
+                      indicatorColor: Colors.white,
+                      isScrollable: true,
+                      controller: tabController,
+                    ),
+                  ),
+
+                  ///TODO add change input locale button here
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      exportJson();
+                    },
+                    icon: Icon(
+                      CupertinoIcons.arrow_down_doc_fill,
+                      color: defaultColorEditor,
+                      size: 15,
+                    ),
+                    label: Text(
+                      'Export',
+                      style: TextStyle(fontFamily: 'monospace'),
+                    ),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => Colors.white),
+                        foregroundColor: MaterialStateColor.resolveWith(
+                            (states) => defaultColorEditor)),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  FormDataInputView(),
+                  RawInputView(),
+                  UploadFileInputView(),
+                ],
+                controller: tabController,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              color: Colors.grey[200],
+              height: 80,
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ///
-                      /// Email Text Field
-                      ///
-                      Container(
-                        width: 350,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                          border:
-                              Border.all(color: defaultColorEditor, width: 2),
-                        ),
-                        child: TextField(
-                          controller: emailEditingController,
-                          onChanged: (value) async {
-                            email = emailEditingController.text;
-                          },
-                          cursorColor: defaultColorEditor,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'youremail@email.com',
-                              hintStyle: TextStyle(color: Colors.grey[400])),
-                        ),
-                      ),
-
-                      ///
-                      /// Generate Button
-                      ///
-                      CustomIconButton(
-                        title: 'Generate',
-                        icon: CupertinoIcons.gear,
-                        onTap: () {
-                          if (emailEditingController.text != '' &&
-                              RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                  .hasMatch(emailEditingController.text)) {
-                            Map<String, dynamic> checkJson =
-                                jsonDecode(content);
-                            if (checkJson.length == 0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Not data found!')));
-                            } else
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return localeDialog();
-                                },
-                              );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('Invalid Email Address!')));
-                          }
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 0.1,
-                  thickness: 0.1,
-                  color: defaultColorEditor,
-                ),
-                Container(
-                  color: defaultColorEditor,
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 60,
-                        child: TabBar(
-                          tabs: [
-                            Text(
-                              'Form Data',
-                              style: TextStyle(
-                                  fontSize: 18, fontFamily: 'monospace'),
-                            ),
-                            Text(
-                              'Raw',
-                              style: TextStyle(
-                                  fontSize: 18, fontFamily: 'monospace'),
-                            ),
-                            Text(
-                              'Upload File',
-                              style: TextStyle(
-                                  fontSize: 18, fontFamily: 'monospace'),
-                            ),
-                          ],
-                          indicatorColor: Colors.white,
-                          isScrollable: true,
-                          controller: tabController,
-                        ),
-                      ),
-
-                      ///TODO add change input locale button here
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          exportJson();
-                        },
-                        icon: Icon(
-                          CupertinoIcons.arrow_down_doc_fill,
-                          color: defaultColorEditor,
-                          size: 15,
-                        ),
-                        label: Text(
-                          'Export',
-                          style: TextStyle(fontFamily: 'monospace'),
-                        ),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.white),
-                            foregroundColor: MaterialStateColor.resolveWith(
-                                (states) => defaultColorEditor)),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      FormDataInputView(),
-                      RawInputView(),
-                      UploadFileInputView(),
-                    ],
-                    controller: tabController,
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  color: Colors.grey[200],
-                  height: 80,
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Designed & Developed By ',
-                            style: TextStyle(
-                                color: Colors.grey[500],
-                                fontFamily: 'monospace'),
-                          ),
-                          InkWell(
-                            child: Text(
-                              'Zain Ur Rehman',
-                              style: TextStyle(
-                                  color: defaultColorEditor,
-                                  fontFamily: 'monospace'),
-                            ),
-                            onTap: () => html.window.open(
-                                'https://github.com/ZainUrRehmanKhan',
-                                'Zain Ur Rehman'),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.copyright_outlined,
+                      Text(
+                        'Designed & Developed By ',
+                        style: TextStyle(
                             color: Colors.grey[500],
-                            size: 15,
-                          ),
-                          Text(
-                            '2021 copyright',
-                            style: TextStyle(
-                                color: Colors.grey[500],
-                                fontFamily: 'monospace'),
-                          ),
-                          InkWell(
-                            child: Text(
-                              ' SparkoSol',
-                              style: TextStyle(
-                                  color: defaultColorEditor,
-                                  fontFamily: 'monospace'),
-                            ),
-                            onTap: () => html.window.open(
-                                'https://github.com/SparcoT', 'SparkoSol'),
-                          ),
-                        ],
+                            fontFamily: 'monospace'),
+                      ),
+                      InkWell(
+                        child: Text(
+                          'Zain Ur Rehman',
+                          style: TextStyle(
+                              color: defaultColorEditor,
+                              fontFamily: 'monospace'),
+                        ),
+                        onTap: () => html.window.open(
+                            'https://github.com/ZainUrRehmanKhan',
+                            'Zain Ur Rehman'),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.copyright_outlined,
+                        color: Colors.grey[500],
+                        size: 15,
+                      ),
+                      Text(
+                        '2021 copyright',
+                        style: TextStyle(
+                            color: Colors.grey[500],
+                            fontFamily: 'monospace'),
+                      ),
+                      InkWell(
+                        child: Text(
+                          ' SparkoSol',
+                          style: TextStyle(
+                              color: defaultColorEditor,
+                              fontFamily: 'monospace'),
+                        ),
+                        onTap: () => html.window.open(
+                            'https://github.com/SparcoT', 'SparkoSol'),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

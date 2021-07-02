@@ -132,77 +132,82 @@ class _UploadFileInputViewState extends State<StatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return EditorWrapper(
-        jsonParsingError: jsonParsingError,
-        child: EditorBackground(
-            child: InkWell(
-          onTap: () async {
-            InputElement uploadInput = FileUploadInputElement();
-            uploadInput.click();
+      jsonParsingError: jsonParsingError,
+      children: [
+        EditorBackground(
+          child: InkWell(
+            onTap: () async {
+              InputElement uploadInput = FileUploadInputElement();
+              uploadInput.click();
 
-            uploadInput.onChange.listen((e) {
-              _addFile(uploadInput.files);
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 15.0),
-            height: 350,
-            child: Stack(
-              children: [
-                Container(
-                    height: 320,
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.5),
-                      child: CustomPaint(
-                        painter: DashRectPainter(
-                            color: Colors.white38, strokeWidth: 3.0, gap: 6.0),
-                      ),
-                    )),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      CupertinoIcons.cloud_upload_fill,
-                      size: 60,
-                      color: Colors.white60,
+              uploadInput.onChange.listen((e) {
+                _addFile(uploadInput.files);
+              });
+            },
+            child: Center(
+              child: Container(
+                height: 320,
+                width: 500,
+                child: Padding(
+                  padding: const EdgeInsets.all(1.5),
+                  child: CustomPaint(
+                    painter: DashRectPainter(
+                      color: Colors.white38,
+                      strokeWidth: 3.0,
+                      gap: 6.0,
                     ),
-                    Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Drop your file here, or ',
-                          style: TextStyle(
+                        Icon(
+                          CupertinoIcons.cloud_upload_fill,
+                          size: 60,
+                          color: Colors.white60,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Drop your file here, or ',
+                              style: TextStyle(
+                                fontFamily: 'monospace',
+                                color: Colors.white60,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Browse',
+                              style: TextStyle(
+                                fontFamily: 'monospace',
+                                color: Colors.lightBlue,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            'Supports: .json',
+                            style: TextStyle(
                               fontFamily: 'monospace',
                               color: Colors.white60,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Browse',
-                          style: TextStyle(
-                              fontFamily: 'monospace',
-                              color: Colors.lightBlue,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold),
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text(
-                        'Supports: .json',
-                        style: TextStyle(
-                            fontFamily: 'monospace',
-                            color: Colors.white60,
-                            fontSize: 15),
-                      ),
-                    )
-                  ],
-                )
-              ],
+                  ),
+                ),
+              ),
             ),
           ),
-        )));
+        ),
+      ],
+    );
   }
 
   Future<Widget> onFilePicked(String result) {
@@ -211,29 +216,34 @@ class _UploadFileInputViewState extends State<StatefulWidget> {
       builder: (context) {
         return AlertDialog(
           content: Text(
-              'Do you want to merge this file JSON in your work\nor want a new start with this JSON?'),
+              'Do you want to merge this file in your work\nor a new start?'),
           actions: [
             DialogButton(
                 title: 'Merge',
                 onPressed: () async {
                   jsonParsingError = '';
-                  updateJsonContent(result).catchError((e) {
+                  try {
+                    updateJsonContent(result);
+                  } catch (e) {
                     jsonParsingError = e.toString();
-                  });
+                  }
                   setState(() {});
                   Navigator.of(context).pop();
                 }),
             DialogButton(
-                title: 'New Start',
-                onPressed: () {
-                  jsonParsingError = '';
-                  startNewJsonMapEntry();
-                  updateJsonContent(result).catchError((e) {
-                    jsonParsingError = e.toString();
-                  });
-                  setState(() {});
-                  Navigator.of(context).pop();
-                }),
+              title: 'New Start',
+              onPressed: () {
+                jsonParsingError = '';
+                startNewJsonMapEntry();
+                try {
+                  updateJsonContent(result);
+                } catch (e) {
+                  jsonParsingError = e.toString();
+                }
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         );
       },

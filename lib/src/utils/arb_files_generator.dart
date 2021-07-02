@@ -1,39 +1,39 @@
-import 'dart:convert';
 import 'dart:html' as html;
 import 'locale_utils.dart';
 import 'package:translator/translator.dart';
 import 'package:flutter_localization_generator/src/utils/json_editor_utils.dart';
 
 Future<void> generate() async {
-  if (content.trim() != '') {
-    Map<String, dynamic> decoded = json.decode(content);
+  final json = <String, dynamic>{};
 
-    for (var locale in toLocales) {
-      String localeContent = '{\n  "@@locale": "$locale",\n';
+  jsonMapEntries.forEach((element) {
+    json[element.first] = element.second;
+  });
 
-      var length = decoded.keys.length;
-      var count = 0;
+  for (var locale in toLocales) {
+    String localeContent = '{\n  "@@locale": "$locale",\n';
 
-      for (var key in decoded.keys) {
-        count++;
-        localeContent += '\n  "$key": "'
-            '${locale == fromLocale ? decoded[key] : await getTranslation(decoded[key], locale)}",\n  "@$key": {}';
+    var length = json.keys.length;
+    var count = 0;
 
-        if (length != count) localeContent += ',';
-        localeContent += '\n';
-      }
+    for (var key in json.keys) {
+      count++;
+      localeContent += '\n  "$key": "'
+          '${locale == fromLocale ? json[key] : await getTranslation(json[key], locale)}",\n  "@$key": {}';
 
-      localeContent += '}';
-
-      var blob = html.Blob([localeContent], 'text/plain', 'native');
-
-      html.AnchorElement(
-        href: html.Url.createObjectUrlFromBlob(blob).toString(),
-      )
-        ..setAttribute("download", "app_$locale.arb")
-        ..click();
+      if (length != count) localeContent += ',';
+      localeContent += '\n';
     }
+
+    localeContent += '}';
+
+    html.AnchorElement(
+      href: html.Url.createObjectUrlFromBlob(html.Blob([localeContent], 'text/plain', 'native')).toString(),
+    )
+      ..setAttribute("download", "app_$locale.arb")
+      ..click();
   }
+
   toLocales.clear();
 }
 
