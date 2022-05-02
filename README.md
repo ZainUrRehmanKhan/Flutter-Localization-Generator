@@ -17,6 +17,9 @@ A Flutter Web Application that can generate .arb (Localization) files in 109 loc
 
 
 ## How to use
+
+Detailed Tutorial: [Internationalize / Localize Flutter Apps Easy Way]
+
 > **Go to the [Web App]** > Three modes available to write or import JSON, you can also edit JSON after importing from the file
 ## 1 - Form Data
 ![FormData](https://github.com/ZainUrRehmanKhan/Flutter-Localization-Generator/blob/master/assets/readme/formdata.JPG?raw=true)
@@ -73,7 +76,7 @@ Want to contribute? Great just three steps to follow!
 ## License
 
 > - MIT
-> - 2021 copyright [Flutter Desk Flutter App Development Company]
+> - 2022 copyright [Flutter Desk Flutter App Development Company]
 
 **Free Software, Hell Yeah!**
 
@@ -81,3 +84,5 @@ Want to contribute? Great just three steps to follow!
 [Translator]: <https://pub.dev/packages/translator>
 [Flutter Desk Flutter App Development Company]: <https://flutterdesk.com>
 [Web App]: <https://localization-generator-flutter.web.app/>
+[Internationalize / Localize Flutter Apps Easy Way]: <https://flutterdesk.com/flutter-localization-generator/>
+
