@@ -73,11 +73,11 @@ Want to contribute? Great just three steps to follow!
 ## License
 
 > - MIT
-> - 2021 copyright [SparkoSol]
+> - 2021 copyright [Flutter Desk Flutter App Development Company]
 
 **Free Software, Hell Yeah!**
 
 [Flutter]: <https://flutter.dev/>
 [Translator]: <https://pub.dev/packages/translator>
-[SparkoSol]: <https://github.com/SparcoT>
+[Flutter Desk Flutter App Development Company]: <https://flutterdesk.com>
 [Web App]: <https://localization-generator-flutter.web.app/>
